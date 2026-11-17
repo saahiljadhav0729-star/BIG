@@ -1,0 +1,4 @@
+Data science uses data.
+Hadoop processes big data.
+MapReduce counts each word.
+Data data Hadoop.
