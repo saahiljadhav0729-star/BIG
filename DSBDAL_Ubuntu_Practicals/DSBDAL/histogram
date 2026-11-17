@@ -1,0 +1,102 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+
+warnings.filterwarnings('ignore')
+
+# Set plot style
+sns.set_style('whitegrid')
+
+# Load Titanic dataset
+dataset = sns.load_dataset('titanic')
+
+# Display first five records
+print(dataset.head())
+
+# Dataset information
+print("\n2. Dataset Information:")
+print(f"Total Rows: {dataset.shape[0]}")
+print(f"Total Columns: {dataset.shape[1]}")
+print(f"\nColumn Names:\n{dataset.columns.tolist()}")
+
+# Check missing values
+print(dataset.isnull().sum())
+
+# Statistical description of fare
+print(dataset['fare'].describe())
+
+# 1. Histogram with KDE
+plt.figure(figsize=(10, 6))
+sns.histplot(dataset['fare'], kde=True, bins=30, color='skyblue')
+plt.title('Distribution of Ticket Fare', fontsize=16, fontweight='bold')
+plt.xlabel('Fare ($)', fontsize=12)
+plt.ylabel('Frequency', fontsize=12)
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+# 2. Histogram without KDE
+plt.figure(figsize=(10, 6))
+sns.histplot(dataset['fare'], kde=False, bins=20, color='coral')
+plt.title('Histogram of Ticket Fare (Without KDE)', fontsize=16, fontweight='bold')
+plt.xlabel('Fare ($)', fontsize=12)
+plt.ylabel('Number of Passengers', fontsize=12)
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+# 3. Joint plot - Scatter plot
+sns.jointplot(x='age', y='fare', data=dataset, kind='scatter', height=8)
+plt.suptitle('Joint Distribution: Age vs Fare', y=1.02, fontsize=14, fontweight='bold')
+plt.show()
+
+# 4. Joint plot - Hexbin plot
+sns.jointplot(x='age', y='fare', data=dataset, kind='hex', height=8)
+plt.suptitle('Hexbin Plot: Age vs Fare', y=1.02, fontsize=14, fontweight='bold')
+plt.show()
+
+# 5. Boxplot
+plt.figure(figsize=(12, 6))
+sns.boxplot(x='class', y='fare', data=dataset, palette='Set2')
+plt.title('Fare Distribution by Passenger Class', fontsize=16, fontweight='bold')
+plt.xlabel('Passenger Class', fontsize=12)
+plt.ylabel('Fare ($)', fontsize=12)
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+# 6. Bar chart and Pie chart
+plt.figure(figsize=(10, 5))
+
+# Bar chart
+plt.subplot(1, 2, 1)
+dataset['survived'].value_counts().plot(
+    kind='bar', color=['salmon', 'lightgreen']
+)
+plt.title('Survival Count', fontsize=14, fontweight='bold')
+plt.xlabel('Survived (0=No, 1=Yes)')
+plt.ylabel('Count')
+plt.xticks(rotation=0)
+
+# Pie chart
+plt.subplot(1, 2, 2)
+dataset['survived'].value_counts().plot(
+    kind='pie', autopct='%1.1f%%', colors=['salmon', 'lightgreen']
+)
+plt.title('Survival Percentage', fontsize=14, fontweight='bold')
+plt.ylabel('')
+plt.tight_layout()
+plt.show()
+
+# 7. Pairplot
+selected_cols = ['age', 'fare', 'survived', 'pclass']
+sns.pairplot(
+    dataset[selected_cols].dropna(),
+    hue='survived',
+    palette='husl',
+    height=2.5
+)
+plt.suptitle('Pairplot of Key Features', y=1.02, fontsize=14, fontweight='bold')
+plt.show()
